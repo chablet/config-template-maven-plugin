@@ -17,6 +17,16 @@
 	<prerequisites>
 		<maven>${mavenVersion}</maven>
 	</prerequisites>
+	<scm>
+		<connection>scm:git:https://github.com/chablet/config-template-maven-plugin.git</connection>
+		<developerConnection>scm:git:https://github.com/chablet/config-template-maven-plugin.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/chablet/config-template-maven-plugin/tree/${project.scm.tag}</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/apache/maven-resources-plugin/issues</url>
+	</issueManagement>
 
 	<url>http://maven.apache.org</url>
 	<properties>
