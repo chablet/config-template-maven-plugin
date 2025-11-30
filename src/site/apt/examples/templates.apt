@@ -1,0 +1,168 @@
+ ------
+ Templates and environment packages
+ ------
+ Miguel Bautista
+ ------
+ 2025-11-29
+ ------
+
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html
+
+Templates and environment packages
+
+ The plugin will generate multiple configuration packages grouped by environments.
+ A properties file can specify the environments by following the pattern <<<environment.property>>> of the properties. For example
+ the following file will produce three environments: <<<dev1>>>, <<<dev2>>>, <<<qa>>> & <<<prod>>>.
+
++-----+
+#default values
+propertyA=value0
+
+#propertyA
+dev1.propertyA=value1
+qa.propertyA=value3
+prod.propertyA=value4
+
+#propertyB
+dev1.propertyB=valueA
+dev2.propertyB=valueB
+qa.propertyB=valueC
+prod.propertyB=valueD
++-----+
+
+ The default location of the properties files is <<</src/main/resources>>>, however a separate path can be specified by
+ setting the the <<<filterDirectory>>> property.
+
+ The following basic configuration will generate four configuration packages
+
++-----+
+<project>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>ca.chablet</groupId>
+        <artifactId>config-template-maven-plugin</artifactId>
+        <configuration>
+          <templates>
+            <resource>
+              <directory>${project.basedir}/src/main/configuration/templates</directory>
+            </resource>
+          </templates>
+          <filters>
+            <filter>config.properties</filter>
+          </filters>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>make-config</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  ...
+</project>
++-----+
+
+ Templates can define variables. These variables, denoted by the <<<$\{...\}>>> or <<<@...@>>> delimiters, come from the
+ properties file. Opposite to the resources plugin, system properties or your project properties are not used.
+
+ For example, the following <<<app.json>>> config file can be used as template
+
++-----+
+{
+  "language": "en",
+  "thresholds": {
+    "high": "${propertyA}",
+    "low": "${propertyB}"
+  }
+}
++-----+
+
+ The plugin will produce the following structure in the <<<target>>> directory:
+
++-----+
+Project
+  +- pom.xml
+  +- configuration
+      +- templates
+          +- app.json
+  +- src
+      +-main
+         +-resources
+  |         +- config.properties
+  +- target
+      +- configuration
+          +-dev1
+             +- app.json
+          +-dev2
+             +- app.json
+          +-qa
+             +- app.json
+          +-prod
+             +- app.json
++-----+
+
+ The <<<dev1\app.json>>> file will have the following content:
+
++-----+
+{
+  "language": "en",
+  "thresholds": {
+    "high": "value1",
+    "low": "valueA"
+  }
+}
++-----+
+
+ whereas the <<<prod\app.json>>> file will have the following content:
+
++-----+
+{
+  "language": "en",
+  "thresholds": {
+    "high": "value4",
+    "low": "valueD"
+  }
+}
++-----+
+
+Default Values
+
+ Default values can be defined for all environments. Default does not specify an environment in the property name.
+ In the example above, the property <<<propertyA>>> sets a default value, and the no environment specific value is set
+ for <<<dev2>>>. The <<<dev2\app.json>>> file will have the following content:
+
++-----+
+{
+  "language": "en",
+  "thresholds": {
+    "high": "value0",
+    "low": "valueB"
+  }
+}
++-----+
+
+ In other words, default values get overridden by environment-specific ones.
