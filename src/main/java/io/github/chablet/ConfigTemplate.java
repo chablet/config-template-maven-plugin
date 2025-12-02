@@ -1,4 +1,4 @@
-package ca.chablet;
+package io.github.chablet;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -151,6 +151,12 @@ public class ConfigTemplate extends AbstractMojo {
 
 	private final MavenProject project;
 
+	/**
+	 * Constructor to pass maven context information.
+	 * @param mavenResourcesFiltering context
+	 * @param session context
+	 * @param project context
+	 */
 	@Inject
 	public ConfigTemplate(MavenResourcesFiltering mavenResourcesFiltering, MavenSession session, MavenProject project) {
 		this.mavenResourcesFiltering = mavenResourcesFiltering;

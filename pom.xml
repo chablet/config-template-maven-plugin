@@ -1,18 +1,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>ca.chablet</groupId>
+	<groupId>io.github.chablet</groupId>
 	<artifactId>config-template-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>Configuration Template Maven Plugin</name>
 	<description>The Configuration Template plugin allows to generate multiple configurations based on templates. The plugin leverage the existing resources and filtering capabilities in maven.</description>
+	<inceptionYear>2025</inceptionYear>
 
 	<contributors>
 		<contributor>
 			<name>Miguel Bautista</name>
 		</contributor>
 	</contributors>
+	<developers>
+		<developer>
+			<name>Miguel Bautista</name>
+			<organizationUrl>https://github.com/chablet</organizationUrl>
+		</developer>
+	</developers>
 
 	<prerequisites>
 		<maven>${mavenVersion}</maven>
@@ -27,8 +34,14 @@
 		<system>GitHub</system>
 		<url>https://github.com/apache/maven-resources-plugin/issues</url>
 	</issueManagement>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 
-	<url>http://maven.apache.org</url>
+	<url>https://github.com/chablet/config-template-maven-plugin</url>
 	<properties>
 		<mavenVersion>3.8.7</mavenVersion>
 		<maven-plugin-api.version>3.9.11</maven-plugin-api.version>
@@ -38,6 +51,7 @@
 		<maven-plugin-plugins.version>3.15.2</maven-plugin-plugins.version>
 		<maven-site-plugin.version>3.21.0</maven-site-plugin.version>
 		<maven-plugin-report-plugin.version>3.15.2</maven-plugin-report-plugin.version>
+		<project.scm.id>github</project.scm.id>
 	</properties>
 
 	<dependencies>
@@ -138,6 +152,71 @@
 				<configuration>
 					<source>21</source>
 					<target>21</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.4.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.12.0</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>3.2.8</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<configuration>
+							<signer>bc</signer>
+							<bestPractices>true</bestPractices>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
+					<scmCommentPrefix>[release]</scmCommentPrefix>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>0.9.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<publishingServerId>central</publishingServerId>
+					<autoPublish>true</autoPublish>
+					<waitUntil>published</waitUntil>
+					<checksums>all</checksums>
 				</configuration>
 			</plugin>
 		</plugins>
