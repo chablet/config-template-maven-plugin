@@ -32,7 +32,7 @@ jobs:
           }]
     - name: Configure Git user
       run: |
-        grep id .m2/settings.xml
+        grep id /home/runner/.m2/settings.xml
         git config user.email "actions@github.com"
         git config user.name "GitHub Actions"
     - name: Deploy plugin to Maven repo
