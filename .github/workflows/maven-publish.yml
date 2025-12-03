@@ -21,18 +21,24 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-        server-id: central
-        server-username: MVN_CENTRAL_USERNAME
-        server-password: MVN_CENTRAL_PASSWORD
+    - name: Setup maven
+      uses: s4u/maven-settings-action@v4.0.0
+      with:
+        githubServer: true
+        servers: |
+          [{
+              "id": "central",
+              "username": "${{ secrets.MVN_CENTRAL_USER }}",
+              "password": "${{ secrets.MVN_CENTRAL_PASSWORD }}"
+          }]
     - name: Configure Git user
       run: |
+        grep id .m2/settings.xml
         git config user.email "actions@github.com"
         git config user.name "GitHub Actions"
     - name: Deploy plugin to Maven repo
       run: |
         mvn -B release:prepare release:perform --file pom.xml
       env:
-        MVN_CENTRAL_USERNAME: ${{ secrets.MVN_CENTRAL_USER }}
-        MVN_CENTRAL_PASSWORD: ${{ secrets.MVN_CENTRAL_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_SIGNING_KEY_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_SIGNGING_KEY }}
