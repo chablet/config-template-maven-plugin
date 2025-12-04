@@ -16,10 +16,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: '21'
         distribution: 'temurin'
+    - name: Debug
+      run: |
+        more /home/runner/.m2/settings.xml
     - name: Setup maven
       uses: s4u/maven-settings-action@v4.0.0
       with:
@@ -32,7 +35,7 @@ jobs:
           }]
     - name: Configure Git user
       run: |
-        grep id /home/runner/.m2/settings.xml
+        more /home/runner/.m2/settings.xml
         git config user.email "actions@github.com"
         git config user.name "GitHub Actions"
     - name: Deploy plugin to Maven repo
