@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.chablet</groupId>
 	<artifactId>config-template-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Configuration Template Maven Plugin</name>
 	<description>The Configuration Template plugin allows to generate multiple configurations based on templates. The plugin leverage the existing resources and filtering capabilities in maven.</description>
 	<inceptionYear>2025</inceptionYear>
@@ -27,7 +26,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/chablet/config-template-maven-plugin.git</connection>
 		<developerConnection>scm:git:https://github.com/chablet/config-template-maven-plugin.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>v1.0.0</tag>
 		<url>https://github.com/chablet/config-template-maven-plugin/tree/${project.scm.tag}</url>
 	</scm>
 	<issueManagement>
