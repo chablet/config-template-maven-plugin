@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: read
+      pages: write
       id-token: write
     needs: build
     steps:
