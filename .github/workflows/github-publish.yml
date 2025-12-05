@@ -13,6 +13,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     steps:
     - uses: actions/checkout@v6
       with:
@@ -24,7 +25,7 @@ jobs:
         distribution: 'temurin'
     - name: Build site
       run: |
-        mvn site --file pom.xml
+        mvn -B site --file pom.xml
     - name: Upload static files as artifact
       id: deployment
       uses: actions/upload-pages-artifact@v4
