@@ -174,7 +174,10 @@ public class ConfigTemplate extends AbstractMojo {
 		}
 
 		if (encoding == null || encoding.isEmpty()) {
-			getLog().warn(STR."File encoding has not been set, using platform encoding \{Charset.defaultCharset().displayName()}. Build is platform dependent!");
+			getLog().warn("File encoding has not been set, using platform encoding "
+					+ Charset.defaultCharset().displayName()
+					+ ". Build is platform dependent!");
+
 			getLog().warn("See https://maven.apache.org/general.html#encoding-warning");
 		}
 
