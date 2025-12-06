@@ -59,8 +59,9 @@ prod.propertyB=valueD
   <build>
     <plugins>
       <plugin>
-        <groupId>ca.chablet</groupId>
+        <groupId>io.github.chablet</groupId>
         <artifactId>config-template-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <configuration>
           <templates>
             <resource>
@@ -149,7 +150,7 @@ Project
 }
 +-----+
 
-Default Values
+* Default Values
 
  Default values can be defined for all environments. Default does not specify an environment in the property name.
  In the example above, the property <<<propertyA>>> sets a default value, and the no environment specific value is set

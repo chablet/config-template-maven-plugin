@@ -31,7 +31,7 @@
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/apache/maven-resources-plugin/issues</url>
+		<url>https://github.com/chablet/config-template-maven-plugin/issues</url>
 	</issueManagement>
 	<licenses>
 		<license>

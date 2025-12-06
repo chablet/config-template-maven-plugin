@@ -29,8 +29,12 @@
 
 Configuration Template Plugin
 
-  The Configuration Template plugin generates multiple configurations based on templates. The plugin leverage the
-  the resources and filtering capabilities of the {{{http://maven.apache.org/shared/maven-filtering/index.html}Maven Filtering}} plugin.
+  The Configuration Template plugin generates multiple configurations based on templates. Configuration can reside
+  in a single file, which defines both the environment names as well as their properties. This allows to have a
+  functionality-centric approach to define configuration. Additionally, the filtering of files allows to reduce errors
+  when having to maintain same configurations for different environments.
+
+  The plugin leverage the the resources and filtering capabilities of the {{{http://maven.apache.org/shared/maven-filtering/index.html}Maven Filtering}} plugin.
 
 * Goals Overview
 
