@@ -1,20 +1,18 @@
-# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
-
 name: Release Maven Package
 
 on:
   workflow_dispatch
 
 jobs:
-  build:
+  build-plugin:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.mvn.outputs.tag }}
     permissions:
       contents: write
       packages: write
-
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up JDK 21
       uses: actions/setup-java@v5
       with:
@@ -35,9 +33,50 @@ jobs:
         git config user.email "actions@github.com"
         git config user.name "GitHub Actions"
     - name: Deploy plugin to Maven repo
+      id: mvn
       run: |
         mvn -B release:prepare release:perform --file pom.xml
+        grep scm.tag= release.properties | sed 's/scm\.tag/tag/' >> "$GITHUB_OUTPUT"
       env:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_SIGNING_KEY_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_SIGNGING_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-pages:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    needs: build-plugin
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.build-plugin.outputs.tag }}
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Build site
+        run: |
+          mvn -B site --file pom.xml
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: target/site/
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+      pages: write
+      id-token: write
+    needs: build-pages
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

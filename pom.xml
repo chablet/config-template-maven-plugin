@@ -40,7 +40,7 @@
 		</license>
 	</licenses>
 
-	<url>https://github.com/chablet/config-template-maven-plugin</url>
+	<url>https://chablet.github.io/config-template-maven-plugin/</url>
 	<properties>
 		<mavenVersion>3.8.7</mavenVersion>
 		<maven-plugin-api.version>3.9.11</maven-plugin-api.version>
