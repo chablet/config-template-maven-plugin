@@ -30,7 +30,7 @@ Providing static content
 
  The plugin allows to copy static content to the resulting configuration packages. Set the <<<staticResources>>>
  configuration, using the {{{https://maven.apache.org/plugins/maven-resources-plugin/examples/resource-directory.html}Resources}} format.
- The following configuration specify static resources
+ The following configuration specify a directory as source of static resources:
 
 +-----+
 <project>

@@ -1,5 +1,7 @@
-# config-template-maven-plugin
-The Configuration Template Plugin creates configuration to the output directory.
+# Configuration Template Maven plugin
+The Configuration Template Plugin creates configuration to the output directory based on templates.
+
+This plugin aims to avoid errors when maintaining application's external configuration for multiple environments. This also allows to define a configuration item (property) for all environments in a single file. This plugin is generally used with the `maven-assembly-plugin` to package the resulting configuration.
 
 ## Usage
 

@@ -49,4 +49,9 @@ under the License.
 			</item>
 		</menu>
 	</body>
+	<custom>
+		<fluidoSkin>
+			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+		</fluidoSkin>
+	</custom>
 </project>
