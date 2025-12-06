@@ -78,27 +78,65 @@ Project
   +- pom.xml
   +- configuration
       +- templates
+         +- app.json
+      +- static
+         +- truststore.jks
+  +- src
+      +-main
+         +- resources
+  +         +- config.properties
+  +- target
+      +- configuration
+          +- dev1
+             +- app.json
+             +- truststore.jks
+          +- dev2
+             +- app.json
+             +- truststore.jks
+          +- qa
+             +- app.json
+             +- truststore.jks
+          +- prod
+             +- app.json
+             +- truststore.jks
++-----+
+
+ Notice how static content was provided to all environments. Static content can include any file, including binary ones since they are not being filtered.
+
+* Environment-specific static content
+
+ The previous example assumes the exact static content is required to all environments, however it's possible to provide
+ environment-specific content by using the same environment names.
+
+ In the following example, static content-specific is provided in the final configuration:
+
++-----+
+Project
+  +- pom.xml
+  +- configuration
+      +- templates
           +- app.json
       +- static
-          +- truststore.jks
+          +- qa
+             +- sample.csv      <-- environment specific
+          +- prod
+             +- keystore.jks    <-- environment specific
   +- src
       +-main
          +-resources
   +         +- config.properties
   +- target
       +- configuration
-          +-dev1
+          +- dev1
              +- app.json
-             +- truststore.jks
-          +-dev2
+          +- dev2
              +- app.json
-             +- truststore.jks
-          +-qa
+          +- qa
              +- app.json
-             +- truststore.jks
-          +-prod
+             +- sample.csv      <-- environment specific
+          +- prod
              +- app.json
-             +- truststore.jks
+             +- keystore.jks    <-- environment specific
 +-----+
 
- Static content can include any file, including binary ones since they are not being filtered.
+ Finally, the static content could include both files or subdirectories for all environments as well as environment-specific content.

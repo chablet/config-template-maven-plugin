@@ -188,9 +188,7 @@ public class ConfigTemplate extends AbstractMojo {
 			File environmentFolder = targetDirectory.toPath().resolve(environment.getKey()).toFile();
 
 			//selectively include/exclude environment subdirectories
-			excludes.remove(environment.getKey());
-			copyStatic(staticResources, environmentFolder, excludes);
-			excludes.add(environment.getKey());
+			copyStatic(staticResources, environmentFolder, excludes, environment.getKey());
 
 			generateConfiguration(templates, environment.getValue(), environmentFolder);
 		}
@@ -241,6 +239,19 @@ public class ConfigTemplate extends AbstractMojo {
 		return environments;
 	}
 
+	/**
+	 * Generate configuration files from the provided list of template resources.
+	 *
+	 * <p>The method ensures all given {@link Resource} entries are marked for filtering,
+	 * creates a {@link MavenResourcesExecution} configured with the supplied parameters
+	 * and delegates the actual filtering/copying to the injected
+	 * {@link MavenResourcesFiltering} instance.</p>
+	 *
+	 * @param resources the list of resources (templates) to process; all resources will be set to filtered
+	 * @param additionalProperties additional properties to be applied during filtering (environment-specific)
+	 * @param templateTargetDirectory destination directory where filtered resources will be written
+	 * @throws MojoExecutionException if resource filtering fails
+	 */
 	private void generateConfiguration(List<Resource> resources, Properties additionalProperties, File templateTargetDirectory) throws MojoExecutionException {
 		//ensure all resources are filtered
 		resources.forEach(resource -> resource.setFiltering(true));
@@ -271,27 +282,57 @@ public class ConfigTemplate extends AbstractMojo {
 
 	}
 
-	private void copyStatic(List<Resource> resources, File templateTargetDirectory, List<String> excludes) throws MojoExecutionException {
-		//ensure all resources are not filtered
+	/**
+	 * Copy static resources for a given environment into the target directory.
+	 *
+	 * <p>This will:</p>
+	 * <ul>
+	 *   <li>Create environment-specific {@link Resource} entries by appending the {@code environment} segment to each resource directory.</li>
+	 *   <li>Ensure original resources are not filtered and add excludes to prevent copying other environment subfolders.</li>
+	 *   <li>Merge the environment-specific resources with the originals and delegate the actual copy to the configured {@code MavenResourcesFiltering} instance.</li>
+	 * </ul>
+	 *
+	 * @param resources list of resources to copy
+	 * @param templateTargetDirectory destination directory for the copied resources
+	 * @param excludes list of environment names whose subfolders should be excluded
+	 * @param environment environment name used to create environment-specific resource directories
+	 * @throws MojoExecutionException if filtering/copying of resources fails
+	 */
+	private void copyStatic(List<Resource> resources, File templateTargetDirectory, List<String> excludes, String environment) throws MojoExecutionException {
+		if (resources.isEmpty()) {
+			return;
+		}
+
+		//create a new environment-specific resource
+		List<Resource> extendedResources = new ArrayList<>(resources.size());
 		resources.forEach(resource -> {
-			resource.setFiltering(false);
-			resource.getExcludes().clear();
-			excludes.forEach(exclude -> resource.addExclude("**/".concat(exclude).concat("/*")));
+			Resource additional = new Resource();
+			String additionalPath = resource.getDirectory().concat(resource.getDirectory().endsWith("/") ? environment : "/".concat(environment));
+			additional.setDirectory(additionalPath);
+			extendedResources.add(additional);
 		});
 
-			MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(
-					resources,
-					templateTargetDirectory,
-					project,
-					encoding,
-					Collections.emptyList(),
-					Collections.emptyList(),
-					session);
+		resources.forEach(resource -> {
+			//ensure all resources are not filtered
+			resource.setFiltering(false);
+			//exclude environment subfolders
+			excludes.forEach(exclude -> resource.addExclude("**/".concat(exclude).concat("/*")));
+		});
+		extendedResources.addAll(resources);
 
-			mavenResourcesExecution.setEscapeWindowsPaths(escapeWindowsPaths);
-			mavenResourcesExecution.setInjectProjectBuildFilters(false);
-			mavenResourcesExecution.setOverwrite(overwrite);
-			mavenResourcesExecution.setIncludeEmptyDirs(includeEmptyDirs);
+		MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(
+				extendedResources,
+				templateTargetDirectory,
+				project,
+				encoding,
+				Collections.emptyList(),
+				Collections.emptyList(),
+				session);
+
+		mavenResourcesExecution.setEscapeWindowsPaths(escapeWindowsPaths);
+		mavenResourcesExecution.setInjectProjectBuildFilters(false);
+		mavenResourcesExecution.setOverwrite(overwrite);
+		mavenResourcesExecution.setIncludeEmptyDirs(includeEmptyDirs);
 		try {
 			mavenResourcesFiltering.filterResources(mavenResourcesExecution);
 		} catch (MavenFilteringException e) {
