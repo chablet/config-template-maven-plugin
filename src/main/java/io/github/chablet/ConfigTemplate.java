@@ -32,7 +32,9 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -173,16 +175,23 @@ public class ConfigTemplate extends AbstractMojo {
 
 		if (encoding == null || encoding.isEmpty()) {
 			getLog().warn("File encoding has not been set, using platform encoding "
-					+ System.getProperty("file.encoding")
+					+ Charset.defaultCharset().displayName()
 					+ ". Build is platform dependent!");
+
 			getLog().warn("See https://maven.apache.org/general.html#encoding-warning");
 		}
 
 		Map<String, Properties> envProperties = loadProperties(filters);
+		List<String> excludes = new ArrayList<>(envProperties.keySet());
 
 		for (Map.Entry<String, Properties> environment : envProperties.entrySet()) {
 			File environmentFolder = targetDirectory.toPath().resolve(environment.getKey()).toFile();
-			copyStatic(staticResources, environmentFolder);
+
+			//selectively include/exclude environment subdirectories
+			excludes.remove(environment.getKey());
+			copyStatic(staticResources, environmentFolder, excludes);
+			excludes.add(environment.getKey());
+
 			generateConfiguration(templates, environment.getValue(), environmentFolder);
 		}
 
@@ -262,9 +271,13 @@ public class ConfigTemplate extends AbstractMojo {
 
 	}
 
-	private void copyStatic(List<Resource> resources, File templateTargetDirectory) throws MojoExecutionException {
+	private void copyStatic(List<Resource> resources, File templateTargetDirectory, List<String> excludes) throws MojoExecutionException {
 		//ensure all resources are not filtered
-		resources.forEach(resource -> resource.setFiltering(false));
+		resources.forEach(resource -> {
+			resource.setFiltering(false);
+			resource.getExcludes().clear();
+			excludes.forEach(exclude -> resource.addExclude("**/".concat(exclude).concat("/*")));
+		});
 
 			MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(
 					resources,
