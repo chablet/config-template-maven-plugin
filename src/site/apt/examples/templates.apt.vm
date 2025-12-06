@@ -59,8 +59,9 @@ prod.propertyB=valueD
   <build>
     <plugins>
       <plugin>
-        <groupId>ca.chablet</groupId>
+        <groupId>io.github.chablet</groupId>
         <artifactId>config-template-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <configuration>
           <templates>
             <resource>
