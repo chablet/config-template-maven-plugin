@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Util {
-	private static final Pattern CONTENT_PATTERN = Pattern.compile("^\\{([a-zA-Z_0-9: \\.,-]+)\\}$");
+	private static final Pattern CONTENT_PATTERN = Pattern.compile("^\\{([a-zA-Z_0-9: \\.,-{}]+)\\}$");
 
 	private Util() {
 		throw new AssertionError("Utility class");

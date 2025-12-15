@@ -30,7 +30,7 @@ Templates and environment packages
 
  The plugin will generate multiple configuration packages grouped by environments.
  A properties file can specify the environments by following the pattern <<<environment.property>>> of the properties. For example
- the following file will produce three environments: <<<dev1>>>, <<<dev2>>>, <<<qa>>> & <<<prod>>>.
+ the following file will produce four environments: <<<dev1>>>, <<<dev2>>>, <<<qa>>> & <<<prod>>>.
 
 +-----+
 #default values
@@ -65,7 +65,7 @@ prod.propertyB=valueD
         <configuration>
           <templates>
             <resource>
-              <directory>${project.basedir}/src/main/configuration/templates</directory>
+              <directory>src/main/configuration/templates</directory>
             </resource>
           </templates>
           <filters>
@@ -108,21 +108,21 @@ prod.propertyB=valueD
 Project
   +- pom.xml
   +- configuration
-      +- templates
-          +- app.json
+     +- templates
+        +- app.json
   +- src
-      +-main
-         +-resources
+      +- main
+         +- resources
   |         +- config.properties
   +- target
       +- configuration
-          +-dev1
+          +- dev1
              +- app.json
-          +-dev2
+          +- dev2
              +- app.json
-          +-qa
+          +- qa
              +- app.json
-          +-prod
+          +- prod
              +- app.json
 +-----+
 
@@ -166,4 +166,4 @@ Project
 }
 +-----+
 
- In other words, default values get overridden by environment-specific ones.
+ In other words, default values get overridden by the environment-specific ones.

@@ -44,12 +44,12 @@ Providing static content
         <configuration>
           <templates>
             <resource>
-              <directory>${project.basedir}/src/main/configuration/templates</directory>
+              <directory>src/main/configuration/templates</directory>
             </resource>
           </templates>
           <staticResources>
             <resource>
-              <directory>${project.basedir}/src/main/configuration/static</directory>
+              <directory>src/main/configuration/static</directory>
             </resource>
           </staticResources>
           <filters>
@@ -82,9 +82,9 @@ Project
       +- static
          +- truststore.jks
   +- src
-      +-main
+      +- main
          +- resources
-  +         +- config.properties
+            +- config.properties
   +- target
       +- configuration
           +- dev1
@@ -101,7 +101,9 @@ Project
              +- truststore.jks
 +-----+
 
- Notice how static content was provided to all environments. Static content can include any file, including binary ones since they are not being filtered.
+ Notice how static content was provided to all environments. Static content can include any file, including binary ones
+ since they are not being filtered. Copying static content is done before creating configuration from templates, this
+ way, static content does not override configuration.
 
 * Environment-specific static content
 
@@ -122,9 +124,9 @@ Project
           +- prod
              +- keystore.jks    <-- environment specific
   +- src
-      +-main
-         +-resources
-  +         +- config.properties
+      +- main
+         +- resources
+            +- config.properties
   +- target
       +- configuration
           +- dev1
@@ -139,4 +141,5 @@ Project
              +- keystore.jks    <-- environment specific
 +-----+
 
- Finally, the static content could include both files or subdirectories for all environments as well as environment-specific content.
+ Finally, the static content could include both files or subdirectories for all environments as well as
+ environment-specific content.
