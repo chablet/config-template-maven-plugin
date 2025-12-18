@@ -19,9 +19,9 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+<site xmlns="http://maven.apache.org/SITE/2.0.0"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
 	<skin>
 		<groupId>org.apache.maven.skins</groupId>
 		<artifactId>maven-fluido-skin</artifactId>
@@ -38,6 +38,7 @@ under the License.
 		<menu name="Examples">
 			<item name="Templates and environment packages" href="examples/templates.html"/>
 			<item name="Providing static content" href="examples/static.html"/>
+			<item name="Expanding properties" href="examples/expansion.html"/>
 		</menu>
 		<menu name="Project Documentation">
 			<item name="Project Information" href="project-info.html">
@@ -54,4 +55,4 @@ under the License.
 			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
 		</fluidoSkin>
 	</custom>
-</project>
+</site>

@@ -36,7 +36,7 @@ jobs:
       id: mvn
       run: |
         mvn -B release:prepare release:perform --file pom.xml
-        grep scm.tag= release.properties | sed 's/scm\.tag/tag/' >> "$GITHUB_OUTPUT"
+        git describe --abbrev=0 >> "$GITHUB_OUTPUT"
       env:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_SIGNING_KEY_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_SIGNGING_KEY }}

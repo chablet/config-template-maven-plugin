@@ -53,3 +53,5 @@ Configuration Template Plugin
   * {{{./examples/templates.html}Templates and environment packages}}
 
   * {{{./examples/static.html}Providing static content}}
+
+  * {{{./examples/expansion.html}Expanding properties}}
