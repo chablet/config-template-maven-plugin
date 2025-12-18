@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -180,14 +181,14 @@ public class ConfigTemplate extends AbstractMojo {
 
 		Map<String, Properties> envProperties = null;
 		try {
-			envProperties = Util.loadProperties(filterDirectory, filters);
+			envProperties = Util.loadProperties(filterDirectory.toPath(), filters);
 		} catch (IOException e) {
 			throw new MojoExecutionException(e);
 		}
 		List<String> excludes = new ArrayList<>(envProperties.keySet());
 
 		for (Map.Entry<String, Properties> environment : envProperties.entrySet()) {
-			File environmentFolder = targetDirectory.toPath().resolve(environment.getKey()).toFile();
+			Path environmentFolder = targetDirectory.toPath().resolve(environment.getKey());
 
 			//selectively include/exclude environment subdirectories
 			copyStatic(staticResources, environmentFolder, excludes, environment.getKey());
@@ -210,13 +211,13 @@ public class ConfigTemplate extends AbstractMojo {
 	 * @param templateTargetDirectory destination directory where filtered resources will be written
 	 * @throws MojoExecutionException if resource filtering fails
 	 */
-	private void generateConfiguration(List<Resource> resources, Properties additionalProperties, File templateTargetDirectory) throws MojoExecutionException {
+	private void generateConfiguration(List<Resource> resources, Properties additionalProperties, Path templateTargetDirectory) throws MojoExecutionException {
 		//ensure all resources are filtered
 		resources.forEach(resource -> resource.setFiltering(true));
 
 			MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(
 					resources,
-					templateTargetDirectory,
+					templateTargetDirectory.toFile(),
 					project,
 					encoding,
 					Collections.emptyList(),
@@ -255,7 +256,7 @@ public class ConfigTemplate extends AbstractMojo {
 	 * @param environment environment name used to create environment-specific resource directories
 	 * @throws MojoExecutionException if filtering/copying of resources fails
 	 */
-	private void copyStatic(List<Resource> resources, File templateTargetDirectory, List<String> excludes, String environment) throws MojoExecutionException {
+	private void copyStatic(List<Resource> resources, Path templateTargetDirectory, List<String> excludes, String environment) throws MojoExecutionException {
 		if (resources.isEmpty()) {
 			return;
 		}
@@ -279,7 +280,7 @@ public class ConfigTemplate extends AbstractMojo {
 
 		MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(
 				extendedResources,
-				templateTargetDirectory,
+				templateTargetDirectory.toFile(),
 				project,
 				encoding,
 				Collections.emptyList(),

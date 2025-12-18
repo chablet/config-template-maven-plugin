@@ -16,7 +16,6 @@ package io.github.chablet;
  * limitations under the License.
  */
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -54,14 +53,13 @@ public class Util {
 	 * @param listOfProperties list of property file paths (resolved relative to `basePath`)
 	 * @return a map from environment name to its {@link Properties} (including common properties)
 	 */
-	public static Map<String, Properties> loadProperties(File basePath, List<String> listOfProperties) throws IOException {
+	public static Map<String, Properties> loadProperties(Path basePath, List<String> listOfProperties) throws IOException {
 		Properties common = new Properties();
-		Path base = basePath.toPath();
 		Map<String, Properties> environments = new HashMap<>();
 
 		//load all properties
 		for (String propertiesFile : listOfProperties) {
-			try (InputStream inputStream = Files.newInputStream(base.resolve(propertiesFile))) {
+			try (InputStream inputStream = Files.newInputStream(basePath.resolve(propertiesFile))) {
 				Properties pf = new Properties();
 				pf.load(inputStream);
 				for (Map.Entry<Object, Object> entry : pf.entrySet()) {
@@ -108,7 +106,7 @@ public class Util {
 	 * @return a single string containing the joined file names with optional prefix and suffix,
 	 *         or an empty string if the directory does not exist or is not a directory
 	 */
-	public static String getContent(String reference, File baseDirectory) {
+	public static String getContent(String reference, Path baseDirectory) {
 		//directory:separator:start:end
 		String[] params = reference.split(":", -1);
 		String dirName = params.length > 0 ? params[0] : "";
@@ -116,7 +114,7 @@ public class Util {
 			return "";
 		}
 
-		Path dir = baseDirectory.toPath().resolve(dirName);
+		Path dir = baseDirectory.resolve(dirName);
 		if (!Files.isDirectory(dir)) {
 			return "";
 		}
@@ -151,14 +149,14 @@ public class Util {
 	 * in-place.
 	 *
 	 * <p>If a property's value matches the pattern {@code \{directory:delimiter:prefix:suffix\}}, the reference is
-	 * passed to {@link #getContent(String, File)} and the property's value is replaced with the returned string.
-	 * {@link #getContent(String, File)} may return an empty string on error or when the referenced
+	 * passed to {@link #getContent(String, Path)} and the property's value is replaced with the returned string.
+	 * {@link #getContent(String, Path)} may return an empty string on error or when the referenced
 	 * directory does not exist.</p>
 	 *
 	 * @param properties the {@link Properties} to process (modified in-place)
-	 * @param targetDirectory base directory used to resolve references passed to {@link #getContent(String, File)}
+	 * @param targetDirectory base directory used to resolve references passed to {@link #getContent(String, Path)}
 	 */
-	public static void processValues(Properties properties, File targetDirectory) {
+	public static void processValues(Properties properties, Path targetDirectory) {
 		Map<Object, Object> updates = null;
 		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
 			Object value = entry.getValue();

@@ -1,4 +1,4 @@
-package io.github.chablet;
+package chablet.github.io;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -16,10 +16,11 @@ package io.github.chablet;
  * limitations under the License.
  */
 
+import io.github.chablet.Util;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,15 +29,15 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UtilTest {
+	private final Path basePath = Path.of("src/test");
 
 	@Test
 	void loadProperties() throws IOException {
 		List<String> properties = new ArrayList<>(2);
 		properties.add("file1.properties");
 		properties.add("file2.properties");
-		File basePath = new File("src/main/test/resources");
 
-		Map<String, Properties> envs = Util.loadProperties(basePath.getAbsoluteFile(), properties);
+		Map<String, Properties> envs = Util.loadProperties(basePath.resolve("resources"), properties);
 
 		//total environments
 		assertEquals(3, envs.size());
@@ -58,7 +59,6 @@ class UtilTest {
 
 	@Test
 	void getContent() {
-		File basePath = new File("src/main/test");
 		//default
 		assertEquals("\"file2.properties\" \"file1.properties\"", Util.getContent("resources", basePath));
 		//comma separated
@@ -78,7 +78,6 @@ class UtilTest {
 		properties.put("a", "b");
 		properties.put("c", "{resources:,}");
 
-		File basePath = new File("src/main/test");
 		Util.processValues(properties, basePath);
 
 		assertEquals("b", properties.get("a"));
