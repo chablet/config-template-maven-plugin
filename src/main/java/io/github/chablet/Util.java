@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -124,7 +125,10 @@ public class Util {
 		String suffix = params.length > 3 ? params[3] : "\"";
 
 		try (Stream<Path> stream = Files.list(dir)) {
-			Iterator<Path> it = stream.filter(Files::isRegularFile).iterator();
+			Iterator<Path> it = stream
+					.filter(Files::isRegularFile)
+					.sorted(Comparator.comparing(Path::getFileName))
+					.iterator();
 			if (!it.hasNext()) {
 				return "";
 			}

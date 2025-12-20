@@ -45,8 +45,8 @@ env1.property2={sample}
 +-----+
 #app.json
 {
-  "property1": "{property1}",
-  "property2": [{property2}]
+  "property1": "${property1}",
+  "property2": [${property2}]
 }
 +-----+
 
@@ -81,7 +81,7 @@ Project
 +-----+
 {
   "property1": "value1",
-  "property2": ["certificate1.crt" "certificate1.crt" "certificate1.crt"]
+  "property2": ["certificate1.crt" "certificate2.crt" "certificate3.crt"]
 }
 +-----+
 
@@ -89,30 +89,28 @@ Project
  understand the directory reference is relative to the environment directory and the expansion occurs after copying
  static content but before building configuration.
 
- In the previous example, the json array has an invalid format, to fix that, we can pass specific configuration
+ In the previous example, the json array has an invalid format, to fix that, we can set the correct output.
 
 * Customizing expansion results
 
- Follow the following syntax to customize the output: <<<\{directory:delimiter:prefix:suffix\}>>>.
+ Follow this syntax to customize the output: <<<\{directory:delimiter:prefix:suffix\}>>>.
  Where <<<delimiter>>>, <<<prefix>>> & <<<suffix>>> are optional. The default values are spaces, and quotes respectively.
 
  To fix the json array, we can specify <<<,>>> as delimiter
 
 +-----+
-#app.json
-{
-  "property1": "{property1}",
-  "property2": [{sample:,}]
-}
+#config.properties
+env1.property1=value1
+env1.property2={sample:,}
 +-----+
 
- The reference to the directory is replaced by its content:
+ The reference to the directory is replaced by its content, separated by commas:
 
 +-----+
 #app.json
 {
   "property1": "value1",
-  "property2": ["certificate1.crt","certificate1.crt","certificate1.crt"]
+  "property2": ["certificate1.crt","certificate2.crt","certificate3.crt"]
 }
 +-----+
 

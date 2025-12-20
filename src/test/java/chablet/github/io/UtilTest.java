@@ -60,13 +60,13 @@ class UtilTest {
 	@Test
 	void getContent() {
 		//default
-		assertEquals("\"file2.properties\" \"file1.properties\"", Util.getContent("resources", basePath));
+		assertEquals("\"file1.properties\" \"file2.properties\"", Util.getContent("resources", basePath));
 		//comma separated
-		assertEquals("\"file2.properties\",\"file1.properties\"", Util.getContent("resources:,", basePath));
+		assertEquals("\"file1.properties\",\"file2.properties\"", Util.getContent("resources:,", basePath));
 		//empty prefix and suffix
-		assertEquals("file2.properties,file1.properties", Util.getContent("resources:,::", basePath));
+		assertEquals("file1.properties,file2.properties", Util.getContent("resources:,::", basePath));
 		//custom delimiter, prefix and suffix
-		assertEquals("{file2.properties};{file1.properties}", Util.getContent("resources:;:{:}", basePath));
+		assertEquals("{file1.properties};{file2.properties}", Util.getContent("resources:;:{:}", basePath));
 
 		//invalid path
 		assertEquals("", Util.getContent("abc:;:':'", basePath));
@@ -81,6 +81,6 @@ class UtilTest {
 		Util.processValues(properties, basePath);
 
 		assertEquals("b", properties.get("a"));
-		assertEquals("\"file2.properties\",\"file1.properties\"", properties.get("c"));
+		assertEquals("\"file1.properties\",\"file2.properties\"", properties.get("c"));
 	}
 }
