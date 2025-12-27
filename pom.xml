@@ -50,6 +50,7 @@
 		<maven-plugin-plugins.version>3.15.2</maven-plugin-plugins.version>
 		<maven-site-plugin.version>3.21.0</maven-site-plugin.version>
 		<maven-plugin-report-plugin.version>3.15.2</maven-plugin-report-plugin.version>
+		<mavenPluginTestingVersion>3.4.0</mavenPluginTestingVersion>
 		<junit-version>6.0.1</junit-version>
 		<project.scm.id>github</project.scm.id>
 	</properties>
@@ -83,6 +84,12 @@
 			<artifactId>maven-core</artifactId>
 			<version>${maven-core.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugin-testing</groupId>
+			<artifactId>maven-plugin-testing-harness</artifactId>
+			<version>${mavenPluginTestingVersion}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

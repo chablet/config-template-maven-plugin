@@ -36,7 +36,8 @@ jobs:
       id: mvn
       run: |
         mvn -B release:prepare release:perform --file pom.xml
-        git describe --abbrev=0 >> "$GITHUB_OUTPUT"
+        TAG=$(git describe --abbrev=0)
+        echo "tag=$TAG" >> "$GITHUB_OUTPUT"
       env:
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_SIGNING_KEY_PASSPHRASE }}
         MAVEN_GPG_KEY: ${{ secrets.MAVEN_SIGNGING_KEY }}
