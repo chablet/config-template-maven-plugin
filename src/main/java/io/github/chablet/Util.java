@@ -108,7 +108,7 @@ public class Util {
 	 *         or an empty string if the directory does not exist or is not a directory
 	 */
 	public static String getContent(String reference, Path baseDirectory) {
-		//directory:separator:start:end
+		//directory:separator:prefix:suffix
 		String[] params = reference.split(":", -1);
 		String dirName = params.length > 0 ? params[0] : "";
 		if (dirName.isEmpty()) {

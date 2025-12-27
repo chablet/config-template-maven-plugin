@@ -59,6 +59,8 @@ class UtilTest {
 
 	@Test
 	void getContent() {
+		//none
+		assertEquals("", Util.getContent("", basePath));
 		//default
 		assertEquals("\"file1.properties\" \"file2.properties\"", Util.getContent("resources", basePath));
 		//comma separated
